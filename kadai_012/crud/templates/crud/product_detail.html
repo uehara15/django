@@ -1,11 +1,46 @@
-from django.db import models
+{% extends "base.html" %}
 
-class Product(models.Model):
-    name = models.CharField(max_length=100)
-    price = models.IntegerField()
-    category = models.CharField(max_length=100, blank=True, null=True)
-    image = models.ImageField(upload_to='images/', blank=True, null=True)
-    description = models.TextField(blank=True, null=True)  # 商品詳細の説明を追加
+{% block title %}商品詳細{% endblock %}
 
-    def __str__(self):
-        return self.name
+{% block content %}
+<h1>商品詳細</h1>
+
+<table class="table table-striped table-hover table-bordered">
+    <thead>
+        <tr>
+            <th>商品名</th>
+            <th>価格</th>
+            <th>カテゴリ</th>
+            <th>商品画像</th>
+            <th>商品説明</th>
+        </tr>
+    </thead>
+    <tr>
+        <td>{{ product.name }}</td>
+        <td>{{ product.price }} 円</td>
+        <td>
+            {% if product.category %}
+                {{ product.category }}
+            {% else %}
+                -
+            {% endif %}
+        </td>
+        <td>
+            {% if product.image %}
+                <img src="{{ product.image.url }}" alt="{{ product.name }}" style="max-width:150px;">
+            {% else %}
+                画像なし
+            {% endif %}
+        </td>
+        <td>
+            {% if product.description %}
+                {{ product.description }}
+            {% else %}
+                -
+            {% endif %}
+        </td>
+    </tr>
+</table>
+
+<a href="{% url 'list' %}">戻る</a>
+{% endblock %}
